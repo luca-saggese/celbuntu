@@ -4,7 +4,8 @@
 Build and validate an Ubuntu LTS amd64 live ISO with Hyprland, Quickshell, Caelestia, and a graphical installer. Never claim an unverified capability is working.
 
 ## Host and target
-- Development host: Apple Silicon macOS. All target builds must run in an amd64 Linux guest under QEMU; do not install or modify a host OS.
+- Intended development host: Intel iMac running macOS. Prefer QEMU HVF hardware acceleration for the amd64 guest when the host and QEMU build expose it; use multi-threaded TCG otherwise. The currently available validation host is Apple Silicon macOS, so Intel iMac performance remains to be verified.
+- All target builds must run in an amd64 Linux guest under QEMU; do not install or modify a host OS.
 - Target: amd64/x86_64 only. Never write an image to physical media without explicit authorization.
 - Keep produced Debian packages, logs, manifests, and ISO artifacts under `artifacts/`.
 

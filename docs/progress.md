@@ -1,12 +1,24 @@
 # Project progress
 
+## Acceptance checklist
+
+- [x] Project target documented as an amd64 Ubuntu live ISO with Caelestia/Hyprland and graphical installer.
+- [x] Intel iMac host strategy specified; QEMU launcher selects HVF when available, with TCG multithread fallback.
+- [ ] Run and measure the guest on the actual Intel iMac; tune CPU and memory allocation.
+- [ ] Confirm whether the target QEMU/macOS graphics stack supports accelerated guest 3D; keep software rendering as supported fallback.
+- [ ] Provision Linux guest, configure SSH, and validate artifact transfer.
+- [ ] Build and validate Debian packages for the desktop stack.
+- [ ] Generate ISO and validate live boot, networking, desktop, and graphical installation.
+- [ ] Validate installed system boot and automated acceptance tests.
+- [ ] Prepare release artifacts and complete release checklist.
+
 ## Milestone status
 
 | Step | Status | Commit | Artifacts | Tests | Blocker |
 |---|---|---|---|---|---|
 | 0. Bootstrap repository | COMPLETED | `9d9c67fc5c46cf976d42caca0efc4851c23d6ce4` | Project skeleton | Host/repository inspection | — |
 | 1. Architecture and base selection | COMPLETED | `c18876bdc0960d6c2b8218681cc5b2caba347364` | Architecture decision, full upstream audit, source pins | `make doctor`; upstream clone/review; exact source pins fetched; official `SHA256SUMS.gpg` verified | Subdirectory license audit/build remains in packaging step |
-| 2. QEMU environment | IN PROGRESS | `e13fb61c78007b85ba7f6063f5424089f45372f2` checkpoint | Persistent 100 GiB qcow2 disk; verified Ubuntu ISO; Live desktop screenshots | ISO GPG+SHA256; TCG multi smoke; QMP confirms 8 vCPU/16 GiB; Live desktop boot | Provision guest, SSH, snapshot/transfer; 3D acceleration unavailable |
+| 2. QEMU environment | IN PROGRESS | `e13fb61c78007b85ba7f6063f5424089f45372f2` checkpoint | Persistent 100 GiB qcow2 disk; verified Ubuntu ISO; Live desktop screenshots | ISO GPG+SHA256; TCG multi smoke; QMP confirms 8 vCPU/16 GiB; Live desktop boot on Apple Silicon | Intel iMac run, provision guest, SSH, snapshot/transfer; target 3D support unknown |
 | 3. Debian build infrastructure | NOT STARTED | — | — | — | — |
 | 4. Hyprland stack | NOT STARTED | — | — | — | — |
 | 5. Quickshell and Caelestia | NOT STARTED | — | — | — | — |
@@ -64,6 +76,12 @@
 - Updated launcher defaults from 4 vCPU/8 GiB to 8 vCPU/16 GiB and enabled `-accel tcg,thread=multi`; the existing 100 GiB disk is unchanged. Added `-no-reboot` to avoid live-CD reboots looping to firmware.
 - GPU result: Homebrew QEMU lists `virtio-vga`, but `virtio-vga-gl` is unavailable and there is no virglrenderer. 3D acceleration is not supported by this build; desktop remains software-rendered.
 - Tests: QEMU `-display none` smoke with `tcg,thread=multi`, 8 vCPUs, 16 GiB exited cleanly; live QMP confirms status running, 8 CPUs, and `base-memory=17179869184`.
-- The VM was restarted with the new settings and reached the Ubuntu Live desktop. Screenshot saved as `artifacts/test-results/ubuntu-live-desktop-8v-16g.png`. It is left running at the desktop for the user.
+- The VM was restarted with the new settings and reached the Ubuntu Live desktop. Screenshot saved as `artifacts/test-results/ubuntu-live-desktop-8v-16g.png`. It has since been stopped at the user's request; the QEMU session exited with status 0.
 - Commits: `e13fb61c78007b85ba7f6063f5424089f45372f2` (resource adjustment checkpoint), `727fa8351545abc6a840156654522e294388b667` (VM helper scripts).
-- Next: user completes installation to the virtual disk and enables SSH; then continue with guest provisioning/build automation.
+- Next: run on the Intel iMac, tune resources, and establish whether HVF and accelerated guest graphics are available. Then provision the guest and continue build automation.
+
+## Specification update (in progress)
+
+- Added `docs/specifications.md` with target host, guest architecture, resource envelope, acceleration policy, graphics limits, product acceptance criteria, and safety boundaries.
+- Updated `AGENTS.md`, `docs/vm.md`, and `scripts/vm/start.sh` to identify Intel iMac as the target host and select HVF when available on an x86_64 macOS host; TCG multi-thread fallback remains automatic.
+- Validation host remains Apple Silicon, so HVF behavior and graphics acceleration on Intel iMac are not yet tested. The VM is stopped.

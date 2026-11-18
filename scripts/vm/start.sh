@@ -12,6 +12,14 @@ OVMF_VARS="$VM_DIR/OVMF_VARS.fd"
 QMP_SOCKET="$VM_DIR/qmp.sock"
 LOG_PATH="$VM_DIR/qemu.log"
 SSH_PORT="${VM_SSH_PORT:-2222}"
+QEMU_ACCELERATORS="$(qemu-system-x86_64 -accel help 2>&1)"
+if [[ -n "${VM_ACCEL:-}" ]]; then
+    ACCEL="${VM_ACCEL}"
+elif [[ "$(uname -m)" == x86_64 && "${QEMU_ACCELERATORS}" == *hvf* ]]; then
+    ACCEL="hvf"
+else
+    ACCEL="tcg,thread=multi"
+fi
 
 for tool in qemu-system-x86_64; do
     command -v "$tool" >/dev/null 2>&1 || { printf 'error: %s is required.\n' "$tool" >&2; exit 1; }
@@ -24,12 +32,12 @@ done
 mkdir -p "$VM_DIR"
 [[ -e "$OVMF_VARS" ]] || cp "$OVMF_VARS_TEMPLATE" "$OVMF_VARS"
 
-printf 'Starting x86_64 guest with TCG emulation. Log: %s\n' "$LOG_PATH"
+printf 'Starting x86_64 guest with %s acceleration. Log: %s\n' "$ACCEL" "$LOG_PATH"
 printf 'QMP socket: %s; SSH forwarding: localhost:%s -> guest:22\n' "$QMP_SOCKET" "$SSH_PORT"
 exec qemu-system-x86_64 \
     -name caelestia-build-amd64 \
     -machine q35,usb=on \
-    -accel tcg,thread=multi \
+    -accel "$ACCEL" \
     -cpu max -smp "${VM_CPUS:-8}" -m "${VM_MEMORY:-16G}" \
     -drive "if=pflash,format=raw,readonly=on,file=$OVMF_CODE" \
     -drive "if=pflash,format=raw,file=$OVMF_VARS" \
