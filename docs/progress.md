@@ -6,7 +6,7 @@
 |---|---|---|---|---|---|
 | 0. Bootstrap repository | COMPLETED | `9d9c67fc5c46cf976d42caca0efc4851c23d6ce4` | Project skeleton | Host/repository inspection | — |
 | 1. Architecture and base selection | COMPLETED | `c18876bdc0960d6c2b8218681cc5b2caba347364` | Architecture decision, full upstream audit, source pins | `make doctor`; upstream clone/review; exact source pins fetched; official `SHA256SUMS.gpg` verified | Subdirectory license audit/build remains in packaging step |
-| 2. QEMU environment | IN PROGRESS | checkpoint pending | Persistent 100 GiB qcow2 disk; verified Ubuntu ISO; Live desktop screenshot | ISO GPG+SHA256; TCG multi smoke; QMP confirms 8 vCPU/16 GiB | New Live boot still loading; provision guest, SSH, snapshot/transfer |
+| 2. QEMU environment | IN PROGRESS | `e13fb61c78007b85ba7f6063f5424089f45372f2` checkpoint | Persistent 100 GiB qcow2 disk; verified Ubuntu ISO; Live desktop screenshots | ISO GPG+SHA256; TCG multi smoke; QMP confirms 8 vCPU/16 GiB; Live desktop boot | Provision guest, SSH, snapshot/transfer; 3D acceleration unavailable |
 | 3. Debian build infrastructure | NOT STARTED | — | — | — | — |
 | 4. Hyprland stack | NOT STARTED | — | — | — | — |
 | 5. Quickshell and Caelestia | NOT STARTED | — | — | — | — |
@@ -64,5 +64,6 @@
 - Updated launcher defaults from 4 vCPU/8 GiB to 8 vCPU/16 GiB and enabled `-accel tcg,thread=multi`; the existing 100 GiB disk is unchanged. Added `-no-reboot` to avoid live-CD reboots looping to firmware.
 - GPU result: Homebrew QEMU lists `virtio-vga`, but `virtio-vga-gl` is unavailable and there is no virglrenderer. 3D acceleration is not supported by this build; desktop remains software-rendered.
 - Tests: QEMU `-display none` smoke with `tcg,thread=multi`, 8 vCPUs, 16 GiB exited cleanly; live QMP confirms status running, 8 CPUs, and `base-memory=17179869184`.
-- The VM was restarted with the new settings. It remains on the Ubuntu boot splash after one minute; the live desktop has not yet been confirmed at the higher allocation. The VM remains running so the user can continue once it becomes ready.
-- Next: confirm the Live desktop, then let the user finish installing Ubuntu to the virtual disk and enable SSH for build automation.
+- The VM was restarted with the new settings and reached the Ubuntu Live desktop. Screenshot saved as `artifacts/test-results/ubuntu-live-desktop-8v-16g.png`. It is left running at the desktop for the user.
+- Commits: `e13fb61c78007b85ba7f6063f5424089f45372f2` (resource adjustment checkpoint), `727fa8351545abc6a840156654522e294388b667` (VM helper scripts).
+- Next: user completes installation to the virtual disk and enables SSH; then continue with guest provisioning/build automation.
