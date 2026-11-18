@@ -8,7 +8,7 @@ Use the official Ubuntu Desktop 24.04.5.1 amd64 image as the source for a remast
 
 ## Why this base
 
-The upstream `12errh/caelestia-ubuntu` project explicitly targets Ubuntu 24.04 and reports CI installation checks on a fresh Ubuntu 24.04 runner. It builds Quickshell and Caelestia against Qt 6.11.2, and documents that the distro's Qt 6.4 is too old for the current shell. That makes 24.04 the only candidate with direct upstream compatibility evidence. Using Desktop retains the graphical live session and installer, which removes substantial integration risk for this project's core use case.
+The upstream `12errh/caelestia-ubuntu` project explicitly targets Ubuntu 24.04 and reports CI installation checks on a fresh Ubuntu 24.04 runner. The reviewed upstream commit is `46ef9a4bb6d0218deca2e081289ded6488677dbf`. It builds Quickshell and Caelestia against Qt 6.11.2, and documents that the distro's Qt 6.4 is too old for the current shell. That makes 24.04 the only candidate with direct upstream compatibility evidence. Using Desktop retains the graphical live session and installer, which removes substantial integration risk for this project's core use case.
 
 Ubuntu 26.04.1 LTS is the current Desktop LTS as of this decision, and offers a newer kernel and longer standard support horizon. It is not selected for the first prototype because the referenced upstream project does not report 26.04 support or CI validation. Re-evaluate after the upstream build is validated on 26.04 and the remastered installer path is proven. Ubuntu 24.04 remains in standard support through May 2029.
 
