@@ -1,0 +1,12 @@
+# Extracted from upstream 12errh/caelestia-ubuntu revisions.conf.
+# These upstream pins still need fetch/signature/license review and clean-guest build validation.
+QUICKSHELL_REPO_URL=https://git.outfoxxed.me/quickshell/quickshell
+QUICKSHELL_REF=c6a516096dd84d5255b409482eb4bf740b952f88
+CAELESTIA_REPO_URL=https://github.com/caelestia-dots/shell
+CAELESTIA_REF=d999d4878ee4cec134168e60d913714566a8cfa6
+M3SHAPES_REPO_URL=https://github.com/soramanew/m3shapes
+M3SHAPES_REF=8a6fe8961749887d677700b6508e0c9249968b7e
+CAVA_REPO_URL=https://github.com/LukashonakV/cava
+CAVA_REF=f03278ef9e5e7948fb206453d2f02758f8db216c
+CAELESTIA_CLI_REPO_URL=https://github.com/caelestia-dots/cli
+CAELESTIA_CLI_REF=82265df3665b40184e8bdc2165541e072c5a4971
