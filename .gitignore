@@ -1,0 +1,11 @@
+# Generated build outputs and VM state
+/artifacts/**
+!/artifacts/.gitkeep
+/work/
+/vm/
+*.qcow2
+*.iso
+*.deb
+*.log
+*.swp
+.DS_Store
